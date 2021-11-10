@@ -31,4 +31,4 @@ def scrape(scraper):
 
 if __name__ == "__main__":
     scrape(google)
-
+    scrape(facebook)
