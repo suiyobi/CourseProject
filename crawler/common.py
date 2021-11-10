@@ -14,7 +14,7 @@ create a webdriver object and set options for headless browsing
 """
 def get_driver():
     options = Options()
-    options.headless = False
+    options.headless = True
     options.add_argument('--log-level=1')
     options.add_argument('enable-javascript')
     return webdriver.Chrome('../chromedriver.exe', options=options)
