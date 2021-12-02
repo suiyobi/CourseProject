@@ -1,10 +1,10 @@
-from selenium import webdriver 
+from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from bs4 import BeautifulSoup
-import re 
+import re
 import time
 
 
@@ -12,9 +12,13 @@ import time
 
 create a webdriver object and set options for headless browsing
 """
+
+
 def get_driver():
     options = Options()
     options.headless = True
+    user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
+    options.add_argument(f'user-agent={user_agent}')
     options.add_argument('--log-level=1')
     options.add_argument('enable-javascript')
     return webdriver.Chrome('../chromedriver.exe', options=options)
@@ -24,6 +28,8 @@ def get_driver():
 
 Write link and text to a file
 """
+
+
 def write_to_file(company_name, description_urls, descriptions):
     description_urls_file = '{}_description_urls.txt'.format(company_name)
     descriptions_file = '{}_descriptions.txt'.format(company_name)
@@ -36,16 +42,21 @@ def write_to_file(company_name, description_urls, descriptions):
 
 Write content to line separated files
 """
+
+
 def write_lst(lst, file_):
-    with open(file_,'w') as f:
+    with open(file_, 'w') as f:
         for l in lst:
             f.write(l)
             f.write('\n')
+
 
 """ Returns a soup object
 
 uses webdriver object to execute javascript code and get dynamically loaded webcontent
 """
+
+
 def get_js_soup(url, driver):
 
     driver.get(url)
@@ -54,7 +65,7 @@ def get_js_soup(url, driver):
     res_html = driver.execute_script('return document.body.innerHTML')
 
     # beautiful soup object to be used for parsing html content
-    soup = BeautifulSoup(res_html,'html.parser') 
+    soup = BeautifulSoup(res_html, 'html.parser')
     return soup
 
 
@@ -63,6 +74,8 @@ def get_js_soup(url, driver):
 Sometimes the text extracted HTML webpage may contain javascript code and some style elements. 
 This function removes script and style tags from HTML so that extracted text does not contain them.
 """
+
+
 def remove_script(soup):
     for script in soup(["script", "style"]):
         script.decompose()
@@ -71,10 +84,11 @@ def remove_script(soup):
 
 """ Process text by converting encoding and strip whitespaces
 """
+
+
 def process_text(text):
     # removes non-ascii characters
-    text = text.encode('ascii',errors='ignore').decode('utf-8')      
+    text = text.encode('ascii', errors='ignore').decode('utf-8')
     # repalces repeated whitespace characters with single space
-    text = re.sub('\s+',' ',text)       
+    text = re.sub('\s+', ' ', text)
     return text
-
