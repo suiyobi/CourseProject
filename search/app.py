@@ -1,7 +1,7 @@
 import sys
 import json
 
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask import request
 
 from search import JobSearch
@@ -14,12 +14,15 @@ def hello_world():
     return json.dumps(urls)
 
 
-@app.route("/search", methods=['POST'])
+@app.route("/search", methods=['GET'])
 def search():
-    query = request.form['query']
+    query = request.args.get('query')
 
     urls = app.job_search.search(query)
-    return json.dumps(urls)
+    # response = json.dumps(urls)
+    response = jsonify(urls)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 def server(config):
     app.job_search = JobSearch(config)
