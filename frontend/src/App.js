@@ -50,8 +50,8 @@ class App extends React.Component {
           </Form>
           <div className="App-result">
             {
-              this.state.links.map((link) =>
-              <Card key={link}>
+              this.state.links.map((link, index) =>
+              <Card key={index}>
                 <Card.Body><a href={link}>{link}</a></Card.Body>
               </Card>
               )
